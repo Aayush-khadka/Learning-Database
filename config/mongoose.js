@@ -1,19 +1,19 @@
 const mongoose = require('mongoose')
-const debuglog = require('debug')("development:mongooseconfig")
+const debuglog = require('debug') ("development:mongooseconfig")
+
+mongoose.connect('mongodb://0.0.0.0:27017/TestDatabase')
+.then(() => console.log("Database connected successfully"))
+.catch(err => console.error("Database connection error:", err));
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/testingdb");
-const db = mongoose.connection;
+// const db = mongoose.Connection()
+// db.on("error",(err)=>{
+//     debuglog(err)
+// })
 
-db.on("error",function(err){
-    debuglog(err);
-    
-})
+// db.on("Open",()=>{
+//         debuglog("conected to data base")
+// })      
 
-db.on("open",function(){
-    console.log();
-    ("CONNECT TO DATABASE")
 
-})
-
-module.exports = db;
+// module.exports = db;
