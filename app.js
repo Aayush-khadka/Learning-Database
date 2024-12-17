@@ -4,12 +4,74 @@ const app = express()
 const port = 3000
 const mongooseConnection  = require('./config/mongoose')
 
-const usermodel = require('./models/user')
+ const usermodel = require('./models/user')
 
 
-app.get("/",(req,res)=>{
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
+
+app.get("/",async (req,res)=>{
+    
     res.send("WORKING")
+
 })
+
+
+
+app.get("/users",async (req,res)=>{
+    
+    let All_data = await usermodel.find()
+    res.send(All_data)
+
+})
+
+app.get('/users/:username',async(req,res)=>{
+
+    let updated_data = await usermodel.findOne({name:req.params.username})
+    res.send(updated_data)
+
+
+
+
+})
+app.post('/update/:username',async(req,res)=>{
+
+    let {name, age} = req.body
+    let updated_data = await usermodel.findOneAndUpdate({name:req.params.username},{name,age})
+    res.send(updated_data)
+})
+
+app.delete('/delete/:username',async(req,res)=>{
+
+    let updated_data = await usermodel.findOneAndDelete({name:req.params.username})
+    res.send("DELETED")
+})
+
+
+
+
+
+
+
+
+app.post('/create',(req,res)=>{
+    // res.send(req.body)
+    let {name,age}= req.body
+    usermodel.create({
+        name:name,
+        age:age
+    })
+    res.send({
+        name:name,
+        age:age
+    })
+})
+
+
+
+
+
 
 // app.get('/create', async (req, res) => {
 //     try {
