@@ -11,28 +11,40 @@ app.get("/",(req,res)=>{
     res.send("WORKING")
 })
 
-app.get('/create', async (req, res) => {
-    try {
-        let createduser = await usermodel.create({
-            name: "Aayush",
-            age: 18
-        });
-        res.send("USER CREATED");
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).send("Failed to create user");
-    }
-});
+// app.get('/create', async (req, res) => {
+//     try {
+//         let createduser = await usermodel.create({
+//             name: "SAMIP",
+//             age: 18
+//         });
+//         res.send("USER CREATED");
+//     } catch (error) {
+//         console.error('Error creating user:', error);
+//         res.status(500).send("Failed to create user");
+//     }
+// });
 
-app.get('/read', async (req,res)=>{
+// app.get('/read', async (req,res)=>{
 
-    let data = await usermodel.find({name:"Aayush"})
+//     let data = await usermodel.find({name:"Aayush"})
 
-    res.send(data)
+//     res.send(data)
+// })
+
+// app.get('/update', async (req,res)=>{
+
+//     let data = await usermodel.updateMany({name:"Aayush"},{name:"KING"},{new:true})
+//     res.send(data)
 
 
+// })
+// app.get('/delete', async (req,res)=>{
+
+//     let data = await usermodel.deleteOne({name:"KING"},{new:true})
+//     res.send(data)
 
 
-})
+// })
+
 
 app.listen(port,()=>console.log(`SERVER LISTENING AT PORT: ${port}`))
