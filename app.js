@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const port = 3000;
+const port = 4000;
 const mongooseConnection = require("./config/mongoose");
 
 const usermodel = require("./models/user");
@@ -9,117 +9,136 @@ const usermodel = require("./models/user");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const mockData = [
-  {
-    name: "Alice Johnson",
-    age: 29,
-    gender: "Female",
-  },
-  {
-    name: "John Smith",
-    age: 34,
-    gender: "Male",
-  },
-  {
-    name: "Emma Lee",
-    age: 22,
-    gender: "Female",
-  },
-  {
-    name: "Michael Brown",
-    age: 41,
-    gender: "Male",
-  },
-  {
-    name: "Olivia Williams",
-    age: 25,
-    gender: "Female",
-  },
-  {
-    name: "David Miller",
-    age: 38,
-    gender: "Male",
-  },
-  {
-    name: "Sophia Taylor",
-    age: 30,
-    gender: "Female",
-  },
-  {
-    name: "James Anderson",
-    age: 45,
-    gender: "Male",
-  },
-  {
-    name: "Isabella Martinez",
-    age: 27,
-    gender: "Female",
-  },
-  {
-    name: "Ethan Wilson",
-    age: 33,
-    gender: "Male",
-  },
-  {
-    name: "Charlotte Davis",
-    age: 19,
-    gender: "Female",
-  },
-  {
-    name: "Benjamin Garcia",
-    age: 39,
-    gender: "Male",
-  },
-  {
-    name: "Amelia Rodriguez",
-    age: 28,
-    gender: "Female",
-  },
-  {
-    name: "Liam Harris",
-    age: 32,
-    gender: "Male",
-  },
-  {
-    name: "Mia Clark",
-    age: 24,
-    gender: "Female",
-  },
-];
-
-app.get("/", async (req, res) => {
-  let data = await usermodel.find();
-  res.send(data);
+app.get("/", (req, res) => {
+  res.send("WORKING");
 });
 
-app.get("/createmany", async (req, res) => {
-  let data = await usermodel.insertMany(mockData);
-  res.send(data);
+app.post("/create", async (req, res) => {
+  let createduser = await usermodel.create({
+    name: req.body.name,
+    age: req.body.age,
+  });
+  res.send(createduser);
 });
 
-// AND OPERATOR
-// app.get("/users",async (req,res)=>{
-
-//     let data = await usermodel.find( {$and: [{age:{$gte:19}},{age:{$lte:30}}]})
-//     res.send(data)
-
-// })
-
-// app.get("/users",async (req,res)=>{
-
-//     let data = await usermodel.find({name:{$regex:/^m.*a$/i}})
-//     res.send(data)
-
-// })
-
-app.get("/users", async (req, res) => {
-  try {
-    let data = await usermodel.find({ name: { $regex: /^m.*k$/i } });
-    res.send(data);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
+app.post("/:name/create/post", async (req, res) => {
+  let user = await usermodel.findOne({ name: req.params.name });
+  user.posts.push({ content: "THIS IS MY FIRST POST" });
+  user.save();
+  res.send(user);
 });
+
+// const mockData = [
+//   {
+//     name: "Alice Johnson",
+//     age: 29,
+//     gender: "Female",
+//   },
+//   {
+//     name: "John Smith",
+//     age: 34,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Emma Lee",
+//     age: 22,
+//     gender: "Female",
+//   },
+//   {
+//     name: "Michael Brown",
+//     age: 41,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Olivia Williams",
+//     age: 25,
+//     gender: "Female",
+//   },
+//   {
+//     name: "David Miller",
+//     age: 38,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Sophia Taylor",
+//     age: 30,
+//     gender: "Female",
+//   },
+//   {
+//     name: "James Anderson",
+//     age: 45,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Isabella Martinez",
+//     age: 27,
+//     gender: "Female",
+//   },
+//   {
+//     name: "Ethan Wilson",
+//     age: 33,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Charlotte Davis",
+//     age: 19,
+//     gender: "Female",
+//   },
+//   {
+//     name: "Benjamin Garcia",
+//     age: 39,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Amelia Rodriguez",
+//     age: 28,
+//     gender: "Female",
+//   },
+//   {
+//     name: "Liam Harris",
+//     age: 32,
+//     gender: "Male",
+//   },
+//   {
+//     name: "Mia Clark",
+//     age: 24,
+//     gender: "Female",
+//   },
+// ];
+
+// app.get("/", async (req, res) => {
+//   let data = await usermodel.find();
+//   res.send(data);
+// });
+
+// app.get("/createmany", async (req, res) => {
+//   let data = await usermodel.insertMany(mockData);
+//   res.send(data);
+// });
+
+// // AND OPERATOR
+// // app.get("/users",async (req,res)=>{
+
+// //     let data = await usermodel.find( {$and: [{age:{$gte:19}},{age:{$lte:30}}]})
+// //     res.send(data)
+
+// // })
+
+// // app.get("/users",async (req,res)=>{
+
+// //     let data = await usermodel.find({name:{$regex:/^m.*a$/i}})
+// //     res.send(data)
+
+// // })
+
+// app.get("/users", async (req, res) => {
+//   try {
+//     let data = await usermodel.find({ name: { $regex: /^m.*k$/i } });
+//     res.send(data);
+//   } catch (err) {
+//     res.status(500).send({ error: err.message });
+//   }
+// });
 
 // app.get("/users",async (req,res)=>{
 

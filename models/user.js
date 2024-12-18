@@ -9,10 +9,15 @@ const userSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  gender: {
-    type: String,
-    required: true,
-  },
+  posts: [
+    {
+      content: String,
+      date: {
+        type: Date,
+        default: Date.now(),
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("user", userSchema);
